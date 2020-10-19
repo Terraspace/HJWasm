@@ -58,10 +58,10 @@ static void genfailure( int signo )
     close_files();
     exit( EXIT_FAILURE );
 }
-int main(int argc, char **argv)
+int main(int argc, char const *argv[])
 /*******************************/
 {
-	char    *pEnv;
+	char const    *pEnv;
 	int     numArgs = 0;
 	int     numFiles = 0;
 	int     rc = 0;

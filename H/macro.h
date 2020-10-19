@@ -46,7 +46,7 @@ enum macro_flags {
 extern int      GetLiteralValue( char *, const char * );
 extern int      RunMacro( struct dsym *, int, struct asm_tok[], char *, int, bool * );
 extern ret_code ExpandText( char *, struct asm_tok[], unsigned int );
-extern int      ExpandLineItems( char *, int, struct asm_tok[], int, int );
+extern int      ExpandLineItems( char const [], int, struct asm_tok[], int, int );
 extern ret_code ExpandLine( char *, struct asm_tok[] );
 extern void     ExpandLiterals( int i, struct asm_tok[] );
 
@@ -55,7 +55,7 @@ extern void     ExpandLiterals( int i, struct asm_tok[] );
 extern struct dsym *CreateMacro( const char * );/* create a macro symbol */
 
 extern void     ReleaseMacroData( struct dsym * );
-extern void     fill_placeholders( char *, const char *, unsigned, unsigned, char * * );
+extern void     fill_placeholders( char *, const char *, unsigned, unsigned, char const * [] );
 extern void     SkipCurrentQueue( struct asm_tok[] );
 extern ret_code StoreMacro( struct dsym *, int, struct asm_tok[], bool );  /* store macro content */
 
@@ -68,7 +68,7 @@ extern void     MacroFini( void );
 
 /* functions in string.c */
 
-extern struct asym *SetTextMacro( struct asm_tok[], struct asym *, const char *, const char * ); /* EQU for texts */
+extern struct asym *SetTextMacro( struct asm_tok const [], struct asym *, const char [], const char [] ); /* EQU for texts */
 extern struct asym *AddPredefinedText( const char *, const char * );
 extern int         TextItemError( struct asm_tok * );
 

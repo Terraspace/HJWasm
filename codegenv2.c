@@ -1,4 +1,4 @@
-
+#include <ctype.h>
 #include "codegenv2.h"
 
 #include <time.h>
@@ -34,7 +34,7 @@ struct Instr_Def* InstrHash[16384];
 static unsigned int hash(const uint_8* data, int size)
 /******************************************/
 {
-	uint_64 fnv_basis = 14695981039346656037;
+	uint_64 fnv_basis = 14695981039346656037U;
 	uint_64 register fnv_prime = 1099511628211;
 	uint_64 h = fnv_basis;
 	int cnt = 0;
@@ -88,13 +88,13 @@ uint_32 GenerateInstrHash(struct Instr_Def* pInstruction)
 	*(pDst + 4) = pInstruction->operand_types[4];
 	len += 4;
 	pDst += 4;
-	return hash(&hashBuffer, len);
+	return hash(hashBuffer, len);
 }
 
 void BuildInstructionTable(void)
 {
 	uint_32 hash = 0;
-	struct Instr_Def* pInstrTbl = &InstrTableV2;
+	struct Instr_Def* pInstrTbl = InstrTableV2;
 	uint_32 i = 0;
 	uint_32 instrCount = sizeof(InstrTableV2) / sizeof(struct Instr_Def);
 
@@ -848,7 +848,7 @@ void BuildEVEX(bool* needEvex, unsigned char* evexBytes, struct Instr_Def* instr
 
 	 BYTE1:
 	 | 7 | 6 | 5 | 4  | 3 | 2 | 1-0 |
-	 | R | X | B | R’ | 0 | 0 |  m  |
+	 | R | X | B | RÂ’ | 0 | 0 |  m  |
 
 	BYTE2:
 	 | 7 | 6-3      | 2 | 1-0 |
@@ -1550,9 +1550,9 @@ ret_code CodeGenV2(const char* instr, struct code_info* CodeInfo, uint_32 oldofs
 
 	/* Determine which Memory Encoding Format Table to Use. */
 	if (CodeInfo->Ofssize == USE64)
-		MemTable = &MemTable64;
+		MemTable = MemTable64;
 	else
-		MemTable = &MemTable32;
+		MemTable = MemTable32;
 
 	/* Force JWASM style FLAT: override back to legacy CodeGen. */
 	if ((opExpr[1].override && opExpr[1].override->tokval == T_FLAT) ||
@@ -1626,7 +1626,8 @@ ret_code CodeGenV2(const char* instr, struct code_info* CodeInfo, uint_32 oldofs
 
 	/* Proceed to generate the instruction */
 	else
-	{
+	{ /* FIXME */ extern int get_curr_srcfile(), GetLineNumber()
+		;
 
 		/*----------------------------------------------------------
 		 Promote broadcast decorators
@@ -1677,7 +1678,7 @@ ret_code CodeGenV2(const char* instr, struct code_info* CodeInfo, uint_32 oldofs
 		/* If the matched instruction requires processing of a memory address */
 		if (matchedInstr->memOpnd != NO_MEM)
 			aso = BuildMemoryEncoding(&modRM, &sib, &rexByte, &needModRM, &needSIB,								/* This could result in modifications to REX/VEX/EVEX, modRM and SIB bytes */
-				&dispSize, &displacement, matchedInstr, opExpr, &needB, &needX, &needRR, CodeInfo);
+				&dispSize, &displacement.displacement64, matchedInstr, opExpr, &needB, &needX, &needRR, CodeInfo);
 		modRM |= BuildModRM(matchedInstr->modRM, matchedInstr, opExpr, &needModRM, &needSIB,
 			((matchedInstr->vexflags & VEX) || (matchedInstr->vexflags & EVEX)));								/* Modify the modRM value for any non-memory operands */
 
@@ -1685,12 +1686,12 @@ ret_code CodeGenV2(const char* instr, struct code_info* CodeInfo, uint_32 oldofs
 		   Create REX, VEX or EVEX prefixes                      
 		  ----------------------------------------------------------*/
 		if ((matchedInstr->vexflags & VEX) != 0 && (matchedInstr->evexflags & EVEX_ONLY) == 0 && CodeInfo->evex_flag == 0)
-			BuildVEX(&needVEX, &vexSize, &vexBytes, matchedInstr, opExpr, needB, needX, opCount);				/* Create the VEX prefix bytes for both reg and memory operands */
+			BuildVEX(&needVEX, &vexSize, vexBytes, matchedInstr, opExpr, needB, needX, opCount);				/* Create the VEX prefix bytes for both reg and memory operands */
 
 		  /* Either the instruction can ONLY be EVEX encoded, or user requested VEX->EVEX promotion. */
 		else if ((matchedInstr->evexflags & EVEX_ONLY) != 0 ||
 			((CodeInfo->evex_flag) && (matchedInstr->vexflags & EVEX) != 0))
-			BuildEVEX(&needEVEX, &evexBytes, matchedInstr, opExpr, needB, needX, needRR, opCount, CodeInfo);	/* Create the EVEX prefix bytes if the instruction supports an EVEX form */
+			BuildEVEX(&needEVEX, evexBytes, matchedInstr, opExpr, needB, needX, needRR, opCount, CodeInfo);	/* Create the EVEX prefix bytes if the instruction supports an EVEX form */
 
 		if (CodeInfo->evex_flag && matchedInstr->evexflags == NO_EVEX)											/* Not possible to EVEX encode instruction per users request */
 			EmitError(NO_EVEX_FORM);

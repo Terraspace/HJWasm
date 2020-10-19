@@ -233,7 +233,7 @@ int RunMacro( struct dsym *macro, int idx, struct asm_tok tokenarray[], char *ou
     DebugMsg1(( "RunMacro(%s): params=>%s< parmcnt=%u vararg=%u\n", macro->sym.name, tokenarray[idx].tokpos, info->parmcnt, macro->sym.mac_vararg ));
 
     if ( info->parmcnt ) {
-        mi.parm_array = (char **)myalloca( info->parmcnt * sizeof( char * ) + PARMSTRINGSIZE );
+        mi.parm_array = myalloca( info->parmcnt * sizeof( char * ) + PARMSTRINGSIZE );
         parmstrings = (char *)(mi.parm_array + info->parmcnt);
         /* init the macro arguments pointer */
         currparm = parmstrings;
@@ -421,7 +421,7 @@ int RunMacro( struct dsym *macro, int idx, struct asm_tok tokenarray[], char *ou
                 }
 
                 if ( tokenarray[idx].token == T_STRING && tokenarray[idx].string_delim == '{' ) {
-                    char *p = tokenarray[idx].string_ptr;
+                    char const *p = tokenarray[idx].string_ptr;
                     int tmp = idx;
                     /* copy the '{' */
                     *ptr++ = '{';
@@ -1142,7 +1142,7 @@ static ret_code RebuildLine( const char *newstring, int i, struct asm_tok tokena
  * *pi: index of token in tokenarray
  * equmode: if 1, dont expand macro functions
  */
-static ret_code ExpandToken( char *line, int *pi, struct asm_tok tokenarray[], int max, int bracket_flags, int equmode )
+static ret_code ExpandToken( char const line[], int *pi, struct asm_tok tokenarray[], int max, int bracket_flags, int equmode )
 /**********************************************************************************************************************/
 {
     int pos;
@@ -1367,7 +1367,7 @@ static ret_code ExpandToken( char *line, int *pi, struct asm_tok tokenarray[], i
  * equmode: 1=don't expand macro functions
  */
 
-int ExpandLineItems( char *line, int i, struct asm_tok tokenarray[], int addbrackets, int equmode )
+int ExpandLineItems( char const line[], int i, struct asm_tok tokenarray[], int addbrackets, int equmode )
 /*************************************************************************************************/
 {
     int k;

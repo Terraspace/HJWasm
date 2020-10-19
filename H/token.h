@@ -80,7 +80,7 @@ struct asm_tok {
         char numbase;             /* T_NUM: number base */
         char specval;             /* 1-byte special tokens: flags */
     };
-    char *string_ptr;
+    char const *string_ptr;
     union {
         unsigned int tokval;      /* index if token is a reserved word */
         unsigned int stringlen;   /* T_STRING: size */

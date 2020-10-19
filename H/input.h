@@ -35,7 +35,7 @@ struct macro_instance {
     struct srcline *currline;
     struct srcline *startline;
     uint_32 localstart;
-    char * *parm_array;
+    char const * *parm_array;
     struct asym *macro;
     unsigned parmcnt;
 };

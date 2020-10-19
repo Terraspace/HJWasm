@@ -65,7 +65,7 @@ extern int  EmitError( int msgnum );
 extern int  EmitErr( int msgnum, ... );
 extern void EmitWarn( int level, int msgnum, ... );
 extern void PrintNote( int msgnum, ... );
-extern char *ErrnoStr( void );
+extern char const *ErrnoStr( void );
 extern int  write_logo( void );
 extern void PrintUsage( void );
 //extern void SeekError( void );

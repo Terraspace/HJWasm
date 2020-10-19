@@ -42,7 +42,7 @@ struct strentry
 
 struct macho_section_entry
 {
-	char *srcName;
+	char const *srcName;
 	struct section_64 section;
 	struct section_64 *next;
 	int dif; /* padding to keep section size multiple of 16 */
@@ -280,7 +280,7 @@ static int GetSymbolIndex(const char *pName, struct macho_module *mm)
 /* ==========================================================================================
 Build a macho_section_entry structure.
 ========================================================================================== */
-struct section_64 * macho_build_section( const char *secName, const char *segName, uint32_t flags, const char *srcName )
+struct section_64 * macho_build_section( const char secName[], const char segName[], uint32_t flags, const char srcName[] )
 {
 	struct macho_section_entry *pSec = NULL;
 	pSec = malloc(sizeof(struct macho_section_entry));

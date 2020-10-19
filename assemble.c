@@ -541,7 +541,8 @@ static ret_code WriteModule( struct module_info *modinfo )
     DebugMsg(("WriteModule exit\n"));
     return( NOT_ERROR );
 }
-
+/* The macro is_valid_first_char is defined differently in globals.h */
+#undef is_valid_first_char
 #define is_valid_first_char( ch )  ( isalpha(ch) || ch=='_' || ch=='@' || ch=='$' || ch=='?' || ch=='.' )
 
 /* check name of text macros defined via -D option */
@@ -1175,6 +1176,7 @@ static int OnePass( void )
 	}
 	if (Parse_Pass == PASS_1)
 	{
+		/* FIXME */ extern int AddSimdTypes ();
 		unsigned  alist = ModuleInfo.list;
 		ModuleInfo.list = 0;
 		AddSimdTypes();
@@ -1261,7 +1263,7 @@ static void get_os_include( void )
 static void get_module_name( void )
 /*********************************/
 {
-    char        *p;
+    char        *p; /* FIXME */ extern int strupr (char []);
 
     /* v2.08: prefer name given by -nm option */
     if ( Options.names[OPTN_MODULE_NAME] ) {
@@ -1413,7 +1415,7 @@ void close_files( void )
 
 /* get default file extension for error, object and listing files */
 
-static char *GetExt( int type )
+static char const *GetExt( int type )
 /*****************************/
 {
     switch ( type ) {
@@ -1797,7 +1799,7 @@ int EXPQUAL AssembleModule( const char *source )
 						printf("%u errors\n", ModuleInfo.g.error_count);
 						SetConsoleTextAttribute(hConsole, screenBufferInfo.wAttributes);
 			#else
-						printf(FWHT("%s: %lu lines, "), GetFNamePart(GetFName(ModuleInfo.srcfile)->fname), GetLineNumber());
+						printf(FWHT("%s: %u lines, "), GetFNamePart(GetFName(ModuleInfo.srcfile)->fname), GetLineNumber());
 						printf(FGRN("%u passes"), Parse_Pass + 1);
 						printf(", ");
 						printf(FCYN("%u ms"), endtime - starttime);

@@ -347,7 +347,7 @@ struct asym *CreateVariable(const char *name, int value)
  * - anything. This will also become a text literal.
  */
 
-struct asym *CreateConstant( struct asm_tok tokenarray[] )
+struct asym *CreateConstant( struct asm_tok const tokenarray[] )
 /********************************************************/
 {
     struct asym         *sym;
@@ -360,7 +360,7 @@ struct asym *CreateConstant( struct asm_tok tokenarray[] )
     int                 i = 2;
 	int                 j;
     ret_code            rc;
-    char                *p;
+    char const               *p;
     bool                cmpvalue = FALSE;
     struct expr         opnd;
     char                argbuffer[MAX_LINE_LEN];

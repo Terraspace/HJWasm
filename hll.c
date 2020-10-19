@@ -1150,7 +1150,7 @@ static ret_code CheckCXZLines(char *p)
 	int lines = 0;
 	int i;
 	int addchars;
-	char *px;
+	char const *px;
 	bool NL = TRUE;
 
 	DebugMsg1(("CheckCXZLines enter, p=>%s<\n", p));

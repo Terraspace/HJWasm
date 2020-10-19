@@ -68,7 +68,7 @@ ret_code EchoDirective( int i, struct asm_tok tokenarray[] )
 ret_code IncludeDirective( int i, struct asm_tok tokenarray[] )
 /*************************************************************/
 {
-    char *name;
+    char const *name;
 
     DebugMsg1(("IncludeDirective enter\n"));
 
@@ -148,7 +148,7 @@ void FreeLibQueue( void )
 ret_code IncludeLibDirective( int i, struct asm_tok tokenarray[] )
 /****************************************************************/
 {
-    char *name;
+    char const *name;
     //struct asym *sym;
 
     if ( Parse_Pass != PASS_1 ) /* do all work in pass 1 */
@@ -308,7 +308,7 @@ ret_code AliasDirective( int i, struct asm_tok tokenarray[] )
 {
     //char *tmp;
     struct asym *sym;
-    char *subst;
+    char const *subst;
 
     i++; /* go past ALIAS */
 
@@ -483,7 +483,7 @@ ret_code SegOrderDirective( int i, struct asm_tok tokenarray[] )
 #if PE_SUPPORT
         || ( Options.output_format == OFORMAT_BIN && ModuleInfo.sub_format == SFORMAT_PE )
 #endif
-       ) {
+       ) { /* FIXME */ extern char const *strupr ();
         if ( Parse_Pass == PASS_1 )
             EmitWarn( 2, NOT_SUPPORTED_WITH_CURR_FORMAT, _strupr( tokenarray[i].string_ptr ) );
     } else

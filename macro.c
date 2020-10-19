@@ -48,7 +48,7 @@
 
 extern int  MacroLocals;
 
-extern bool inMacroBody = FALSE;
+bool inMacroBody = FALSE;
 
 /* the list of macro param + local names is hold temporarily only.
  * once the names have been replaced by placeholders,
@@ -1138,7 +1138,7 @@ ret_code UndefDirective( int i, struct asm_tok tokenarray[] )
 }
 
 /* Implemented DEFINE directive v2.40 */
-ret_code DefineDirective( int i, struct asm_tok tokenarray[] )
+ret_code DefineDirective( int i, struct asm_tok const tokenarray[] )
 /***********************************************************/
 {
     struct asym *sym;

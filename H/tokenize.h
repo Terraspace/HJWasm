@@ -56,6 +56,6 @@ enum tok_flags3 {
 };
 
 extern ret_code GetToken( struct asm_tok[], struct line_status * );
-extern int      Tokenize( char *, unsigned int, struct asm_tok[], unsigned int );
+extern int      Tokenize( char const [], unsigned int, struct asm_tok[], unsigned int );
 
 #endif
