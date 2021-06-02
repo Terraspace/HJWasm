@@ -17,7 +17,13 @@
 #include <fixup.h>
 #include <dbgcv.h>
 #include <linnum.h>
+#ifdef _WIN32
 #include <direct.h>
+#define getcwd _getcwd
+#else
+#define _MAX_PATH 4096
+#define _pgmptr "uasm"
+#endif
 #include <picohash.h>
 
 #define SIZE_CV_SEGBUF ( MAX_LINE_LEN * 4 )
@@ -1343,7 +1349,7 @@ void cv_write_debug_tables(struct dsym* symbols, struct dsym* types, void* pv)
 		}
 
 		cv.currdir = LclAlloc(_MAX_PATH * 4);
-		_getcwd(cv.currdir, _MAX_PATH * 4);
+		getcwd(cv.currdir, _MAX_PATH * 4);
 		objname = cv.currdir + strlen(cv.currdir);
 
 		/* source filename string table */
@@ -1575,12 +1581,12 @@ void cv_write_debug_tables(struct dsym* symbols, struct dsym* types, void* pv)
 		len = strlen(p) + 1;
 		s = strcpy(s, p) + len;
 		*s++ = '\0';
-		EnvBlock->reclen = (unsigned short)(s - cv.ps - 2);
+		EnvBlock->reclen = (unsigned short)(s - (char*)cv.ps - 2);
 		cv.ps = s;
 
 		/* length needs to be added for each symbol */
 
-		cv.section->length += (s - start);
+		cv.section->length += (s - (char*)start);
 
 	}
 	else {
