@@ -1,7 +1,7 @@
 
 /* prototypes of TYPES.C */
 
-#ifndef _TYPES_H_INCLUDED
+#ifndef _TYPES_H_INCLUDED_
 #define _TYPES_H_INCLUDED_
 
 /* qualified_type us used for parsing a qualified type. */
