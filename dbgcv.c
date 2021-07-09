@@ -17,7 +17,14 @@
 #include <fixup.h>
 #include <dbgcv.h>
 #include <linnum.h>
+#ifdef __UNIX__
+#include <unistd.h>
+#define _getcwd getcwd
+#define _pgmptr "uasm"
+#define _MAX_PATH 260
+#else
 #include <direct.h>
+#endif
 #include <picohash.h>
 
 #define SIZE_CV_SEGBUF ( MAX_LINE_LEN * 4 )
@@ -1575,12 +1582,12 @@ void cv_write_debug_tables(struct dsym* symbols, struct dsym* types, void* pv)
 		len = strlen(p) + 1;
 		s = strcpy(s, p) + len;
 		*s++ = '\0';
-		EnvBlock->reclen = (unsigned short)(s - cv.ps - 2);
+		EnvBlock->reclen = (unsigned short)(s - (char*)cv.ps - 2);
 		cv.ps = s;
 
 		/* length needs to be added for each symbol */
 
-		cv.section->length += (s - start);
+		cv.section->length += (s - (char*)start);
 
 	}
 	else {
