@@ -874,13 +874,13 @@ struct module_info {
 };
 
 #if AVXSUPP
-	unsigned char       decoflags;          /* EVEX  sets up decorator flags in P2: z, aaa   */
-	unsigned char       broadflags;         /* EVEX  sets up decorator flags in P2: b        */
-	unsigned char       evex;               /* EVEX  encoding  */
-	unsigned char       evexflag;			/* UASM 2.48 User specified EVEX promotion */
+extern unsigned char    decoflags;          /* EVEX  sets up decorator flags in P2: z, aaa   */
+extern unsigned char    broadflags;         /* EVEX  sets up decorator flags in P2: b        */
+extern unsigned char    evex;               /* EVEX  encoding  */
+extern unsigned char    evexflag;			/* UASM 2.48 User specified EVEX promotion */
 #endif
 
-	unsigned char		MODULEARCH;			/* MODULE Architecutre <avx or sse> */
+extern unsigned char    MODULEARCH;			/* MODULE Architecutre <avx or sse> */
 
 #define CurrSource      ModuleInfo.currsource
 #define Token_Count     ModuleInfo.token_count
